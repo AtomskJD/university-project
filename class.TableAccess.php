@@ -1,6 +1,6 @@
 <?php
 // Абстрактный класс для доступа к таблицам
-class TableAccess {
+abstract class TableAccess {
     const USER_NAME = 'root';
     const USER_PASS = 'pass@word1';
     const DB_HOST   = 'localhost';
@@ -38,7 +38,4 @@ class TableAccess {
     }
 
 }
-$myTest = new TableAccess();
-$myTest->getData();
-$myTest->getInfo();
 ?>
