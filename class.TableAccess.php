@@ -6,24 +6,15 @@ abstract class TableAccess {
     const DB_HOST   = 'localhost';
     const DB_NAME   = 'mydb';
     protected $_db;
+    protected $table_name = 'none';
+    protected $columns = array();
 
-    function getData()
-    {
-        //Получаем данные из таблицы
-        $sql = "SELECT * FROM storages";
-        foreach($this->_db->query($sql) as $row){
-            print_r($row);
-        }
-
-    }
-    function setData()
-    {
-        // Запись данных в таблицу
-    }
-    function getInfo()
+    abstract public function getData();
+    abstract public function setData($prop);
+    public function getInfo()
     {
         // Получаем имя и описание таблицы
-        echo "<h1>Все ОК</h1>";
+        return $this->table_name;
     }
     function __construct()
     {
@@ -31,6 +22,9 @@ abstract class TableAccess {
         try {
             $conn = "mysql:host=" .self::DB_HOST .";dbname=". self::DB_NAME; 
             $this->_db = new PDO($conn, self::USER_NAME, self::USER_PASS);
+
+            $refObj = new ReflectionClass($this);
+            $this->table_name = $refObj->getName();
         }
         catch (PDOException $e) {
             echo $e->getMessage();
