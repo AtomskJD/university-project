@@ -4,6 +4,7 @@ function __autoload($class_name){
 }
 class View {
     protected $table_class;
+
     function __construct($class_name)
     {
         switch ($class_name) {
@@ -17,29 +18,46 @@ class View {
         }
     }
 
-
-	public function getTable()
-	{  
+    public function viewName()      // Интерфейс к getName
+    {
+        printf("<p>Имя таблицы: %s</p>", $this->table_class->getName());
+    }
+    public function viewCount()     // Интенфейс к getCount
+    {
+        printf("<p>Таблица модержит %d записей</p>", $this->table_class->getCount());
+    }
+    public function viewHeaders()   // Интерфейс к getHeaders
+    {   
+        $out = '<tr>';
+        foreach ($this->table_class->getHeaders() as $key => $value) {
+            $out .= "<td> $value </td>";
+        }
+        $out .= '</tr>';
+        return $out;
+    }
+    public function viewInfo()      // Интерфейс к getInfo
+    {
+        $table_info = $this->table_class->getInfo();
+        printf("<p>Описание таблицы: %s</p>", $table_info);
+    }
+    public function viewData()      // Интерфейс к getData
+    {  
         $data = $this->table_class->getData();
+        echo $this->viewHeaders();
         foreach (new TableView(new RecursiveArrayIterator($data)) as $value) {
             echo "<td>$value</td>";
         }
     }
-    public function getTableInfo()
+    public function setDataForm()   // Интерфейс к setData
     {
-        $table_info = $this->table_class->getInfo();
-		printf("<h1>Это вывод вида для %s</h1>", $table_info);
-    }
-    public function setForm()
-    {}
-    public function getTableCount()
-    {
-        return $this->table_class->getCount();
+        $ref = new ReflectionClass($this->table_class);
+        print_r( $ref->getMethod('setData')->getNumberOfRequiredParameters());
     }
 }
 $view = new View('storages');
-// $view->getDataView();
-$view->getTableInfo();
-echo $view->getTableCount();
+
 ?>
-<table border=1><?php $view->getTable() ?></table>
+<h1><?php $view->viewName() ?></h1>
+<h1><?php $view->viewHeaders() ?></h1>
+<H1><?php $view->setDataForm() ?></H1>
+<table border=1><?php $view->viewData() ?></table>

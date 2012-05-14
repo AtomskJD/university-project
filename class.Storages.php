@@ -12,7 +12,7 @@ class Storages extends TableAccess {
 
     public function getInfo()
     {
-        return "сборная информация о таблице";
+        return "таблица содержит номера складов и их наименование";
     }
     public function getName()
     {
@@ -47,13 +47,13 @@ class Storages extends TableAccess {
         return $query->fetchAll();
     }
 
-    public function setData($prop)
+    public function setData($id, $storage_name)
     {
         // Запись данных в таблицу
         try {
             var_dump($prop);
             $query = $this->_db->prepare("INSERT INTO ". $this->table_name ." VALUES (?, ?)");
-            $query->execute($prop);
+            $query->execute(array($id, $storage_name));
         }
         catch (PDOException $e){
             echo $e->getMessage();
