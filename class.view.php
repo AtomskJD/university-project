@@ -4,12 +4,14 @@ function __autoload($class_name){
 }
 class View {
     protected $table_class;
+    protected $form_class;
 
     function __construct($class_name)
     {
         switch ($class_name) {
             case 'storages':
                 $this->table_class = new Storages();
+                // $this->form_class = new StoragesForm();
                 break;
             
             default:
@@ -26,7 +28,7 @@ class View {
     {
         printf("<p>Таблица модержит %d записей</p>", $this->table_class->getCount());
     }
-    public function viewHeaders()   // Интерфейс к getHeaders
+    protected function viewHeaders()   // Интерфейс к getHeaders
     {   
         $out = '<tr>';
         foreach ($this->table_class->getHeaders() as $key => $value) {
@@ -50,14 +52,27 @@ class View {
     }
     public function setDataForm()   // Интерфейс к setData
     {
-        $ref = new ReflectionClass($this->table_class);
-        print_r( $ref->getMethod('setData')->getNumberOfRequiredParameters());
+        $prop = $this->table_class->getTableProp();
+        $prop_num = count($prop);
+        print_r ($prop_num);
+        $out = "<form method='GET'>\n";
+        for ($i=0; $i<$prop_num; $i++){
+            if (!$prop[$i]['fkey']){
+                $out .= "<p>"
+                . $prop[$i]['t_name']
+                .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
+            }
+        }
+        $out .= "<input type='submit'>";
+        $out .= "</form>";
+        echo $out;
+
     }
 }
 $view = new View('storages');
 
 ?>
 <h1><?php $view->viewName() ?></h1>
-<h1><?php $view->viewHeaders() ?></h1>
-<H1><?php $view->setDataForm() ?></H1>
+<h1><?php $view->viewInfo() ?></h1>
+<div><?php $view->setDataForm() ?></div>
 <table border=1><?php $view->viewData() ?></table>

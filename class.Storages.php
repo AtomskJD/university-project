@@ -8,7 +8,21 @@ class Storages extends TableAccess {
         'storage_id'    => 'Номер склада',
         'storage_name'  => 'Название склада'
         );
+    protected $table_prop = array(
+        array(
+            'name'=>'storage_id',
+            't_name'=>'Номер склада',
+            'fkey'=>0),
+        array(
+            'name'=>'storage_name',
+            't_name'=>'Название склада',
+            'fkey'=>0)
+        );
 
+    public function getTableProp()
+    {
+        return $this->table_prop;
+    }
 
     public function getInfo()
     {
