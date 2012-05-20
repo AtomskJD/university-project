@@ -20,9 +20,9 @@ class View {
         }
     }
 
-    public function viewName()      // Интерфейс к getName
+    public function viewTitle()      // Интерфейс к getName
     {
-        printf("<p>Имя таблицы: %s</p>", $this->table_class->getName());
+        printf("<p>Имя таблицы: %s</p>", $this->table_class->getTitle());
     }
     public function viewCount()     // Интенфейс к getCount
     {
@@ -52,27 +52,40 @@ class View {
     }
     public function setDataForm()   // Интерфейс к setData
     {
+            if (isset($_GET['id'])) echo $_GET['id'];
+
         $prop = $this->table_class->getTableProp();
         $prop_num = count($prop);
-        print_r ($prop_num);
-        $out = "<form method='GET'>\n";
-        for ($i=0; $i<$prop_num; $i++){
-            if (!$prop[$i]['fkey']){
-                $out .= "<p>"
-                . $prop[$i]['t_name']
-                .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
-            }
+    
+        if ($_SERVER['REQUEST_METHOD'] != 'POST'){
+            // echo $prop_num;
+            $out = "<form action='". $_SERVER['PHP_SELF'] ."' method='POST'>\n";
+            for ($i=0; $i<$prop_num; $i++){
+                if (!$prop[$i]['fkey']){
+                    $out .= "<p>"
+                    . $prop[$i]['t_name']
+                    .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
+                }
         }
         $out .= "<input type='submit'>";
         $out .= "</form>";
         echo $out;
+    } else {
+        for ($i=0; $i < $prop_num; $i++) { 
+            $name = $prop[$i]['name'];
+            $arr[$i] = $_POST[$name];
+        }
+        var_dump($arr);
+        $this->table_class->setData($arr);
+    }
 
     }
 }
 $view = new View('storages');
 
 ?>
-<h1><?php $view->viewName() ?></h1>
+<p><a href="?id=storages">HELLO</a></p>
+<h1><?php $view->viewTitle() ?></h1>
 <h1><?php $view->viewInfo() ?></h1>
 <div><?php $view->setDataForm() ?></div>
 <table border=1><?php $view->viewData() ?></table>

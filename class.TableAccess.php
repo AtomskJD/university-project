@@ -11,7 +11,7 @@ abstract class TableAccess {
     protected $columns = array(); //
 
     abstract public function getData();
-    // abstract public function setData();
+    abstract public function setData($prop);
     abstract public function getInfo(); // Получаем имя и описание таблицы
     
     function __construct()

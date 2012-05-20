@@ -2,7 +2,8 @@
 include "class.TableAccess.php";
 
 class Storages extends TableAccess {
-    protected $table_name = "Склады";
+    protected $table_name = "storages";
+    protected $table_title = "склады";
     protected $table_count = "none";
     protected $table_headers = array(
         'storage_id'    => 'Номер склада',
@@ -28,9 +29,9 @@ class Storages extends TableAccess {
     {
         return "таблица содержит номера складов и их наименование";
     }
-    public function getName()
+    public function getTitle()
     {
-        return $this->table_name;
+        return $this->table_title;
     }
 
     public function getCount()
@@ -61,13 +62,13 @@ class Storages extends TableAccess {
         return $query->fetchAll();
     }
 
-    public function setData($id, $storage_name)
+    public function setData($prop)
     {
         // Запись данных в таблицу
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO ". $this->table_name ." VALUES (?, ?)");
-            $query->execute(array($id, $storage_name));
+            $query = $this->_db->prepare("INSERT INTO storages VALUES (?, ?)");
+            $query->execute($prop) or die (print_r($query->errorInfo()));
         }
         catch (PDOException $e){
             echo $e->getMessage();
