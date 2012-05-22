@@ -5,17 +5,23 @@ function __autoload($class_name){
 class View {
     protected $table_class;
     protected $form_class;
+    protected $selfpath;
 
-    function __construct($class_name)
+    function __construct($class_name='storages')
     {
+        $this->selfpath = $_SERVER['PHP_SELF'];
         switch ($class_name) {
             case 'storages':
                 $this->table_class = new Storages();
-                // $this->form_class = new StoragesForm();
+                $this->selfpath .="?id=storages";                
+                break;
+            case 'workshops':
+                $this->table_class = new Workshops();
+                $this->selfpath .="?id=workshops";
                 break;
             
             default:
-                # code...
+                $this->table_class = new Storages();
                 break;
         }
     }
@@ -52,40 +58,36 @@ class View {
     }
     public function setDataForm()   // Интерфейс к setData
     {
-            if (isset($_GET['id'])) echo $_GET['id'];
+        if (isset($_GET['id'])) echo $_GET['id'];
 
-        $prop = $this->table_class->getTableProp();
-        $prop_num = count($prop);
-    
-        if ($_SERVER['REQUEST_METHOD'] != 'POST'){
-            // echo $prop_num;
-            $out = "<form action='". $_SERVER['PHP_SELF'] ."' method='POST'>\n";
-            for ($i=0; $i<$prop_num; $i++){
-                if (!$prop[$i]['fkey']){
-                    $out .= "<p>"
-                    . $prop[$i]['t_name']
-                    .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
-                }
+            $prop = $this->table_class->getTableProp();
+            $prop_num = count($prop);
+            echo $this->selfpath;
+        
+            if ($_SERVER['REQUEST_METHOD'] != 'POST'){ // ЕСЛИ GET
+                // echo $prop_num;
+                $out = "<form action='". $this->selfpath ."' method='POST'>\n";
+                for ($i=0; $i<$prop_num; $i++){
+                    if (!$prop[$i]['fkey']){
+                        $out .= "<p>"
+                        . $prop[$i]['t_name']
+                        .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
+                    }
+            }
+            $out .= "<input type='submit'>";
+            $out .= "</form>";
+            echo $out;
+        } 
+        else { // ЕСЛИ POST
+            for ($i=0; $i < $prop_num; $i++) { 
+                $name = $prop[$i]['name'];
+                $arr[$i] = $_POST[$name];
+            }
+            var_dump($arr);
+            $this->table_class->setData($arr);
+            header("Location: ".$this->selfpath);
         }
-        $out .= "<input type='submit'>";
-        $out .= "</form>";
-        echo $out;
-    } else {
-        for ($i=0; $i < $prop_num; $i++) { 
-            $name = $prop[$i]['name'];
-            $arr[$i] = $_POST[$name];
-        }
-        var_dump($arr);
-        $this->table_class->setData($arr);
-    }
 
     }
 }
-$view = new View('storages');
-
 ?>
-<p><a href="?id=storages">HELLO</a></p>
-<h1><?php $view->viewTitle() ?></h1>
-<h1><?php $view->viewInfo() ?></h1>
-<div><?php $view->setDataForm() ?></div>
-<table border=1><?php $view->viewData() ?></table>

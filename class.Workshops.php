@@ -1,22 +1,22 @@
 <?php
 // include "class.TableAccess.php";
 
-class Storages extends TableAccess {
-    protected $table_name = "storages";
-    protected $table_title = "склады";
+class Workshops extends TableAccess {
+    protected $table_name = "workshops";
+    protected $table_title = "Цеха";
     protected $table_count = "none";
     protected $table_headers = array(
-        'storage_id'    => 'Номер склада',
-        'storage_name'  => 'Название склада'
+        'storage_id'    => 'Номер цеха',
+        'storage_name'  => 'Название цеха'
         );
     protected $table_prop = array(
         array(
-            'name'=>'storage_id',
-            't_name'=>'Номер склада',
+            'name'=>'workshop_id',
+            't_name'=>'Номер цеха',
             'fkey'=>0),
         array(
-            'name'=>'storage_name',
-            't_name'=>'Название склада',
+            'name'=>'workshop_name',
+            't_name'=>'Название цеха',
             'fkey'=>0)
         );
 
@@ -27,7 +27,7 @@ class Storages extends TableAccess {
 
     public function getInfo()
     {
-        return "таблица содержит номера складов и их наименование";
+        return "таблица содержит номера и название цехов";
     }
     public function getTitle()
     {
@@ -37,7 +37,7 @@ class Storages extends TableAccess {
     public function getCount()
     {
         try {   
-            $query = $this->_db->prepare("SELECT COUNT(*) FROM Storages");
+            $query = $this->_db->prepare("SELECT COUNT(*) FROM workshops");
             $query->execute() or die ("ERROR");
             $result = $query->fetch(PDO::FETCH_NUM);
             return $result[0];
@@ -55,7 +55,7 @@ class Storages extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT * FROM storages";
+        $sql = "SELECT * FROM workshops";
         $query = $this->_db->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -67,7 +67,7 @@ class Storages extends TableAccess {
         // Запись данных в таблицу
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO storages VALUES (?, ?)");
+            $query = $this->_db->prepare("INSERT INTO workshops VALUES (?, ?)");
             $query->execute($prop) or die (print_r($query->errorInfo()));
         }
         catch (PDOException $e){
