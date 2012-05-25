@@ -20,6 +20,8 @@ abstract class TableAccess {
         try {
             $conn = "mysql:host=" .self::DB_HOST .";dbname=". self::DB_NAME; 
             $this->_db = new PDO($conn, self::USER_NAME, self::USER_PASS);
+            $this->_db->exec('SET NAMES utf8');
+            //$this->_db->exec('SET character set utf8_genelal_ci');
         }
         catch (PDOException $e) {
             echo $e->getMessage();

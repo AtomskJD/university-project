@@ -1,4 +1,5 @@
 <?php
+header("Content-type: text/html; charset=utf-8"); 
     include_once "class.view.php";
     if (isset($_GET['id'])){
         $view = new View($_GET['id']);
@@ -25,12 +26,11 @@
  <a href="?id=workshops">Цеха</a>
 </div>
 <div id="main">
- <?php $view->viewTitle() ?>
- <?php $view->viewInfo()?>
- <?php $view->
- <p><table><?php $view->viewData() ?></table></p>
+ <?php $view->viewTitle(); ?>
+ <?php $view->viewInfo(); ?>
+ <p><table><?php $view->viewData(); ?></table></p>
  <hr>
- <?php $view->setDataForm() ?>
+ <?php $view->setDataForm(); ?>
 </div>
 <div id="footer">
  

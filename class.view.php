@@ -66,7 +66,7 @@ class View {
         
             if ($_SERVER['REQUEST_METHOD'] != 'POST'){ // ЕСЛИ GET
                 // echo $prop_num;
-                $out = "<form action='". $this->selfpath ."' method='POST'>\n";
+                $out = "<form accept-charset='utf8' action='". $this->selfpath ."' method='POST'>\n";
                 for ($i=0; $i<$prop_num; $i++){
                     if (!$prop[$i]['fkey']){
                         $out .= "<p>"
