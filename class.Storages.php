@@ -47,7 +47,7 @@ class Storages extends TableAccess {
 
     }
 
-    public function getHeaders()
+    public function getHeaders()//TODO: Перенести в австрактный класс
     {
         return $this->table_headers;
     }

@@ -5,10 +5,6 @@ class Workshops extends TableAccess {
     protected $table_name = "workshops";
     protected $table_title = "Цеха";
     protected $table_count = "none";
-    protected $table_headers = array(
-        'storage_id'    => 'Номер цеха',
-        'storage_name'  => 'Название цеха'
-        );
     protected $table_prop = array(
         array(
             'name'=>'workshop_id',
@@ -42,14 +38,9 @@ class Workshops extends TableAccess {
             $result = $query->fetch(PDO::FETCH_NUM);
             return $result[0];
         } catch (PDOException $e){
-            return $e->getNessage();
+            return $e->getMessage();
         }
 
-    }
-
-    public function getHeaders()
-    {
-        return $this->table_headers;
     }
 
 	public function getData()
