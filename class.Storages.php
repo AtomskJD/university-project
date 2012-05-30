@@ -5,10 +5,6 @@ class Storages extends TableAccess {
     protected $table_name = "storages";
     protected $table_title = "склады";
     protected $table_count = "none";
-    protected $table_headers = array(
-        'storage_id'    => 'Номер склада',
-        'storage_name'  => 'Название склада'
-        );
     protected $table_prop = array(
         array(
             'name'=>'storage_id',
@@ -45,11 +41,6 @@ class Storages extends TableAccess {
             return $e->getNessage();
         }
 
-    }
-
-    public function getHeaders()//TODO: Перенести в австрактный класс
-    {
-        return $this->table_headers;
     }
 
 	public function getData()

@@ -7,11 +7,11 @@ class TableView extends RecursiveIteratorIterator {
     }
     function beginChildren()
     {
-        echo '<tr>';
+        echo "\r\n<tr>";
     }
     function endChildren()
     {
-        echo '</tr>';
+        echo "\r\n</tr>";
     }
 }
 ?>

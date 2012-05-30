@@ -36,12 +36,11 @@ class View {
     }
     protected function viewHeaders()   // Интерфейс к getTableProp выводим заголовги полей
     {   
-        //TODO: перенести в абстрактный класс преобразование getTableProp() в getHeaders
-        $out = '<tr>';
-        foreach ($this->table_class->getTableProp() as $prop) {
-            echo '<td>'. $prop['t_name'] .'</td>';
+        $out = "\r\n<tr>";
+        foreach ($this->table_class->getHeaders() as $prop) {
+            $out .= '<td>'. $prop .'</td>';
         }
-        $out .= '</tr>';
+        $out .= "</tr>";
         return $out;
     }
     public function viewInfo()      // Интерфейс к getInfo
@@ -54,7 +53,7 @@ class View {
         $data = $this->table_class->getData();
         echo $this->viewHeaders();
         foreach (new TableView(new RecursiveArrayIterator($data)) as $value) {
-            echo "<td>$value</td>";
+            echo "\r\n\t<td>$value</td>";
         }
     }
     public function setDataForm()   // Интерфейс к setData

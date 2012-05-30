@@ -22,7 +22,12 @@ abstract class TableAccess {
     abstract public function getTableProp();    // Возвращает двумерный массив свойств полей таблицы
     abstract public function getCount();        // Возвращает число записей
     
-    
+    function getHeaders(){
+        foreach ($this->getTableProp() as $headers){
+            $out[] = $headers['t_name'];
+        }
+        return $out;
+    }
     function __construct()
     {
         // Инициализируем соединение с базой

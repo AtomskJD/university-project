@@ -28,7 +28,7 @@ header("Content-type: text/html; charset=utf-8");
 <div id="main">
  <?php $view->viewTitle(); ?>
  <?php $view->viewInfo(); ?>
- <p><table><?php $view->viewData(); ?></table></p>
+ <p><table border=1><?php $view->viewData(); ?></table></p>
  <hr>
  <?php $view->setDataForm(); ?>
 </div>
