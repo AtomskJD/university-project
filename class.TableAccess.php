@@ -13,21 +13,37 @@ abstract class TableAccess {
     protected $table_title  = 'Title';
     protected $table_prop   = array();
     protected $table_count  = 0;
+    protected $table_info   = 'DEFAULT TABLE INFO';
     
     // Секция абстрактных методов для таблиц все методы возвратные
     abstract public function getData();         // Возврат значений таблицы
-    abstract public function setData($prop);    // Вставка данных
-    abstract public function getTitle();        // Заголовок таблицы
-    abstract public function getInfo();         // Получаем имя и описание таблицы
-    abstract public function getTableProp();    // Возвращает двумерный массив свойств полей таблицы
     abstract public function getCount();        // Возвращает число записей
+    abstract public function setData($prop);    // Вставка данных
     
-    function getHeaders(){
-        foreach ($this->getTableProp() as $headers){
+    
+    public function getTitle()                  // Заголовок таблицы
+    {
+        return $this->table_title;
+    }
+    
+    public function getInfo()                   // Получаем имя и описание таблицы
+    {
+        return $this->table_info;
+    }
+    
+    public function getTableProp()              // Возвращает двумерный массив свойств полей таблицы
+    {
+        return $this->table_prop;    
+    }
+    
+    function getHeaders()                       // Возвращает переведенные заголовки таблицы из свойств таблицы 
+    {
+        foreach ($this->table_prop as $headers){
             $out[] = $headers['t_name'];
         }
         return $out;
     }
+    
     function __construct()
     {
         // Инициализируем соединение с базой

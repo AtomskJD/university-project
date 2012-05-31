@@ -1,34 +1,19 @@
 <?php
-// include "class.TableAccess.php";
-
 class Workshops extends TableAccess {
-    protected $table_name = "workshops";
-    protected $table_title = "Цеха";
-    protected $table_count = "none";
+    protected $table_name       = "workshops";
+    protected $table_title      = "Цеха";
+    protected $table_count      = "none";
+    protected $table_info       = "таблица содержит номера и название цехов";
     protected $table_prop = array(
-        array(
-            'name'=>'workshop_id',
-            't_name'=>'Номер цеха',
-            'fkey'=>0),
-        array(
-            'name'=>'workshop_name',
-            't_name'=>'Название цеха',
-            'fkey'=>0)
-        );
-
-    public function getTableProp()
-    {
-        return $this->table_prop;
-    }
-
-    public function getInfo()
-    {
-        return "таблица содержит номера и название цехов";
-    }
-    public function getTitle()
-    {
-        return $this->table_title;
-    }
+                                    array(
+                                        'name'  => 'workshop_id',
+                                        't_name'=> 'Номер цеха',
+                                        'fkey'  => 0),
+                                    array(
+                                        'name'  => 'workshop_name',
+                                        't_name'=> 'Название цеха',
+                                        'fkey'  => 0)
+                                    );
 
     public function getCount()
     {
