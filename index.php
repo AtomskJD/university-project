@@ -22,11 +22,13 @@ header("Content-type: text/html; charset=utf-8");
  
 </div>
 <div id="nav">
- <a href="?id=storages">Склады</a>
- <a href="?id=workshops">Цеха</a>
+ <a href="?id=storages">Склады</a><br />
+ <a href="?id=workshops">Цеха</a><br />
+ <a href="?id=items">Продукция</a>
 </div>
 <div id="main">
  <?php $view->viewTitle(); ?>
+ <?php print_r($view->viewForeignKey()) ?>
  <?php $view->viewInfo(); ?>
  <p><table border=1><?php $view->viewData(); ?></table></p>
  <hr>

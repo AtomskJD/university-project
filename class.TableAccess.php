@@ -9,10 +9,10 @@ abstract class TableAccess {
     protected $_db;
     
     // Заглушки параметров таблицы, использование через методы в конкретных классах
-    protected $table_name   = 'Name';
+    protected $table_name   = 'Default Name';
     protected $table_title  = 'Title';
-    protected $table_prop   = array();
-    protected $table_count  = 0;
+    protected $table_prop   = array('Default prop');
+    protected $table_count  = null;
     protected $table_info   = 'DEFAULT TABLE INFO';
     
     // Секция абстрактных методов для таблиц все методы возвратные

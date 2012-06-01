@@ -19,6 +19,10 @@ class View {
                 $this->table_class = new Workshops();
                 $this->selfpath .="?id=workshops";
                 break;
+            case 'items':
+                $this->table_class = new Items();
+                $this->selfpath .="?id=items";
+                break;
             
             default:
                 $this->table_class = new Storages();
@@ -30,10 +34,12 @@ class View {
     {
         printf("<p>Имя таблицы: %s</p>", $this->table_class->getTitle());
     }
+    
     public function viewCount()     // Интенфейс к getCount
     {
         printf("<p>Таблица модержит %d записей</p>", $this->table_class->getCount());
     }
+    
     protected function viewHeaders()   // Интерфейс к getTableProp выводим заголовги полей
     {   
         $out = "\r\n<tr>";
@@ -43,11 +49,18 @@ class View {
         $out .= "</tr>";
         return $out;
     }
+    
     public function viewInfo()      // Интерфейс к getInfo
     {
         $table_info = $this->table_class->getInfo();
         printf("<p>Описание таблицы: %s</p>", $table_info);
     }
+    
+    public function viewForeignKey()
+    {
+        return $this->table_class->getForeginKey();
+    }
+    
     public function viewData()      // Интерфейс к getData
     {  
         $data = $this->table_class->getData();
@@ -56,6 +69,7 @@ class View {
             echo "\r\n\t<td>$value</td>";
         }
     }
+    
     public function setDataForm()   // Интерфейс к setData
     {
         if (isset($_GET['id'])) echo $_GET['id'];
@@ -72,6 +86,19 @@ class View {
                         $out .= "<p>"
                         . $prop[$i]['t_name']
                         .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
+                    }
+                    // TODO: Переработать на выподающий список
+                    else {
+                        $list = '';
+                        foreach ($this->viewForeignKey() as $fk){
+                                $list .=$fk['storage_name'] ."<br />";
+                            }
+                        $out .= "<p>"
+                            . $prop[$i]['t_name']
+                            .": <input type='text' name='". $prop[$i]['name'] ."'> <em>FK: ".
+                            $prop[$i]['name'] . $list
+                            . "</em></p>\n";
+                            
                     }
             }
             $out .= "<input type='submit'>";
