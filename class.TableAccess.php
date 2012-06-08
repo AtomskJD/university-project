@@ -44,6 +44,13 @@ abstract class TableAccess {
         return $out;
     }
     
+   /**
+ *  function getForeginKey($fkey)                    // TODO: заглушка для шаблона
+ *     {
+ *         return 1;
+ *     }
+ */
+    
     function __construct()
     {
         // Инициализируем соединение с базой
@@ -56,6 +63,7 @@ abstract class TableAccess {
             echo $e->getMessage();
         }
     }
+    // TODO: перенести setData() в родительский класс
 
 }
 ?>

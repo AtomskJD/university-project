@@ -23,6 +23,11 @@ class View {
                 $this->table_class = new Items();
                 $this->selfpath .="?id=items";
                 break;
+                
+            case 'itemshasworkshops':
+                $this->table_class = new ItemsHasWorkshops();
+                $this->selfpath .="?id=itemshasworkshops";
+                break;
             
             default:
                 $this->table_class = new Storages();
@@ -56,11 +61,6 @@ class View {
         printf("<p>Описание таблицы: %s</p>", $table_info);
     }
     
-    public function viewForeignKey()
-    {
-        return $this->table_class->getForeginKey();
-    }
-    
     public function viewData()      // Интерфейс к getData
     {  
         $data = $this->table_class->getData();
@@ -69,45 +69,50 @@ class View {
             echo "\r\n\t<td>$value</td>";
         }
     }
+    public function viewList($fkey)
+    {
+        $name = $fkey['name'];
+        $fkey = $fkey['fkey'];
+        $fk = $this->table_class->getForeginKey($fkey);
+        
+        $out = "<select name='". $name ."'>";
+        foreach($fk as $value){
+            $out .= "<option value='". $value[$fkey['fkey_id']] ."'>";
+            $out .= $value[$fkey['fkey_name']];
+            $out .= "</option>";
+        }
+            $out .= "</select>";
+        return $out;
+    }
     
     public function setDataForm()   // Интерфейс к setData
     {
-        if (isset($_GET['id'])) echo $_GET['id'];
 
-            $prop = $this->table_class->getTableProp();
-            $prop_num = count($prop);
-            echo $this->selfpath;
-        
-            if ($_SERVER['REQUEST_METHOD'] != 'POST'){ // ЕСЛИ GET
-                // echo $prop_num;
-                $out = "<form accept-charset='utf8' action='". $this->selfpath ."' method='POST'>\n";
-                for ($i=0; $i<$prop_num; $i++){
-                    if (!$prop[$i]['fkey']){
-                        $out .= "<p>"
-                        . $prop[$i]['t_name']
-                        .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
-                    }
-                    // TODO: Переработать на выподающий список
-                    else {
-                        $list = '';
-                        foreach ($this->viewForeignKey() as $fk){
-                                $list .=$fk['storage_name'] ."<br />";
-                            }
-                        $out .= "<p>"
-                            . $prop[$i]['t_name']
-                            .": <input type='text' name='". $prop[$i]['name'] ."'> <em>FK: ".
-                            $prop[$i]['name'] . $list
-                            . "</em></p>\n";
-                            
-                    }
-            }
-            $out .= "<input type='submit'>";
-            $out .= "</form>";
-            echo $out;
+        $prop = $this->table_class->getTableProp();
+        $prop_num = count($prop);
+    
+        if ($_SERVER['REQUEST_METHOD'] != 'POST'){ // ЕСЛИ GET
+            // echo $prop_num;
+            $out = "<form accept-charset='utf8' action='". $this->selfpath ."' method='post'>\n";
+            for ($i=0; $i<$prop_num; $i++){
+                if (!$prop[$i]['fkey']){
+                    $out .= "<p>"
+                    . $prop[$i]['t_name']
+                    .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
+                }
+                else {
+                    $out .= "<p>". $this->viewList($prop[$i])
+                        . "</p>\n";
+                        
+                }
+        }
+        $out .= "<input type='submit'>";
+        $out .= "</form>";
+        echo $out;
         } 
         else { // ЕСЛИ POST
             for ($i=0; $i < $prop_num; $i++) { 
-                $name = $prop[$i]['name'];
+                $name = $prop[$i]['name'];      // TODO: у нас есть имя поля таблицы но мы его пока не передаем
                 $arr[$i] = $_POST[$name];
             }
             var_dump($arr);

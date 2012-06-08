@@ -24,11 +24,11 @@ header("Content-type: text/html; charset=utf-8");
 <div id="nav">
  <a href="?id=storages">Склады</a><br />
  <a href="?id=workshops">Цеха</a><br />
- <a href="?id=items">Продукция</a>
+ <a href="?id=items">Продукция</a><br />
+  <a href="?id=itemshasworkshops">Продукция - Цеха</a>
 </div>
 <div id="main">
  <?php $view->viewTitle(); ?>
- <?php print_r($view->viewForeignKey()) ?>
  <?php $view->viewInfo(); ?>
  <p><table border=1><?php $view->viewData(); ?></table></p>
  <hr>

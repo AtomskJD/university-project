@@ -14,18 +14,23 @@ class Items extends TableAccess {
                                             't_name'=> 'Название товара',
                                             'fkey'  => 0),
                                         array(
-                                            'name'  => 'storage_id',
+                                            'name'  => 'storage_id',                    //что идет в таблицу
                                             't_name'=> 'Название склада',
-                                            'fkey'  => 1 
+                                            'fkey'  => array(
+                                                            'fkey_table'=>'storages',
+                                                            'fkey_name'=>'storage_name',
+                                                            'fkey_id'=>'storage_id'     //соответствие из ВК
+                                                            ) 
                                             )
                                     );
-    public function getForeginKey()
+    public function getForeginKey($fkey)
     {
-        $query = $this->_db->prepare('SELECT storage_name FROM storages');
+        $query = $this->_db->prepare('SELECT '. $fkey['fkey_id'] .', '. $fkey['fkey_name'] .' FROM '.$fkey['fkey_table']);
         $query->execute() or die ("ERROR gettin FK");
-        $out = $query->fetchAll();
+        $out = $query->fetchAll(PDO::FETCH_ASSOC);
         return $out;
     }
+    
     public function getCount()
     {
         try {   
@@ -53,6 +58,7 @@ class Items extends TableAccess {
     public function setData($prop)
     {
         // Запись данных в таблицу
+        //TODO: Возможно перенести в родительский класс
         try {
             var_dump($prop);
             $query = $this->_db->prepare("INSERT INTO items VALUES (?, ?, ?)");
