@@ -28,6 +28,14 @@ class View {
                 $this->table_class = new ItemsHasWorkshops();
                 $this->selfpath .="?id=itemshasworkshops";
                 break;
+            case 'reportslist':
+                $this->table_class = new reportsList();
+                $this->selfpath .="?id=reportslist";
+                break;
+            case 'reports':
+                $this->table_class = new Reports();
+                $this->selfpath .="?id=reports";
+                break;
             
             default:
                 $this->table_class = new Storages();
@@ -95,13 +103,14 @@ class View {
             // echo $prop_num;
             $out = "<form accept-charset='utf8' action='". $this->selfpath ."' method='post'>\n";
             for ($i=0; $i<$prop_num; $i++){
+                if (isset($prop[$i]['hide']) ) continue;
                 if (!$prop[$i]['fkey']){
                     $out .= "<p>"
                     . $prop[$i]['t_name']
                     .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
                 }
                 else {
-                    $out .= "<p>". $this->viewList($prop[$i])
+                    $out .= "<p>". $prop[$i]['t_name'] ." : ". $this->viewList($prop[$i])
                         . "</p>\n";
                         
                 }
@@ -113,7 +122,7 @@ class View {
         else { // ЕСЛИ POST
             for ($i=0; $i < $prop_num; $i++) { 
                 $name = $prop[$i]['name'];      // TODO: у нас есть имя поля таблицы но мы его пока не передаем
-                $arr[$i] = $_POST[$name];
+                $arr[$name] = $_POST[$name];
             }
             var_dump($arr);
             $this->table_class->setData($arr);

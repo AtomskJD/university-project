@@ -1,27 +1,28 @@
 <?php
-class ItemsHasWorkshops extends TableAccess {
+class reportsList extends TableAccess {
     protected $table_name   = "items_has_workshops";
     protected $table_title  = "Какими цехами какой товар производится";
     protected $table_info   = "таблица производственного отношения продукции и цеха производства";
     protected $table_count  = "none";
     protected $table_prop   = array(                                       
                                         array(
-                                            'name'  => 'items_item_id',                    //что идет в таблицу
-                                            't_name'=> 'Название продукции',
-                                            'fkey'  => array(
-                                                            'fkey_table'=>'items',
-                                                            'fkey_name'=>'item_name',
-                                                            'fkey_id'=>'item_id'     //соответствие из ВК
-                                                            ) 
-                                            ),
-                                        array(
-                                            'name'  => 'workshops_workshop_id',                    //что идет в таблицу
+                                            'name'  => 'workshop_id',                    //что идет в таблицу
                                             't_name'=> 'Название цеха',
                                             'fkey'  => array(
                                                             'fkey_table'=>'workshops',
                                                             'fkey_name'=>'workshop_name',
                                                             'fkey_id'=>'workshop_id'     //соответствие из ВК
                                                             ) 
+                                            ),
+                                        array(
+                                            'name'  => 'report_id',                    //что идет в таблицу
+                                            't_name'=> 'номер отчета',
+                                            'fkey'  => 0
+                                            ),
+                                        array(
+                                            'name'  => 'report_date',                    //что идет в таблицу
+                                            't_name'=> 'Дата отчета',
+                                            'fkey'  => 0
                                             )
                                     );
     public function getForeginKey($fkey)
@@ -35,7 +36,7 @@ class ItemsHasWorkshops extends TableAccess {
     public function getCount()
     {
         try {   
-            $query = $this->_db->prepare("SELECT COUNT(*) FROM items_has_workshops");
+            $query = $this->_db->prepare("SELECT COUNT(*) FROM reports_llist");
             $query->execute() or die ("ERROR");
             $result = $query->fetch(PDO::FETCH_NUM);
             return $result[0];
@@ -48,11 +49,9 @@ class ItemsHasWorkshops extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT item_name, workshop_name FROM items_has_workshops 
-            INNER JOIN items
-                ON items_has_workshops.items_item_id = items.item_id
-            INNER JOIN workshops
-                ON items_has_workshops.workshops_workshop_id = workshops.workshop_id ORDER BY item_name";
+        $sql = "SELECT workshop_name, report_id, report_date FROM reports_list
+                    INNER JOIN workshops
+                        ON workshops.workshop_id = reports_list.workshop_id";
         $query = $this->_db->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -65,11 +64,8 @@ class ItemsHasWorkshops extends TableAccess {
         //TODO: Возможно перенести в родительский класс
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO items_has_workshops VALUES (:item_id, :workshop_id)");
-            
-            $query->bindParam(':item_id', $prop['items_item_id']);
-            $query->bindParam(':workshop_id', $prop['workshops_workshop_id']);
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query = $this->_db->prepare("INSERT INTO reports_list VALUES (?, ?)");
+            $query->execute($prop) or die (print_r($query->errorInfo()) );
         }
         catch (PDOException $e){
             echo $e->getMessage();

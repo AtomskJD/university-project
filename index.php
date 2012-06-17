@@ -25,7 +25,10 @@ header("Content-type: text/html; charset=utf-8");
  <a href="?id=storages">Склады</a><br />
  <a href="?id=workshops">Цеха</a><br />
  <a href="?id=items">Продукция</a><br />
-  <a href="?id=itemshasworkshops">Продукция - Цеха</a>
+ <a href="?id=itemshasworkshops">Продукция - Цеха</a><br />
+ <a href="?id=reportslist">Отчеты по цехам</a><br />
+ <a href="?id=reports">Отчеты </a><br />
+ 
 </div>
 <div id="main">
  <?php $view->viewTitle(); ?>

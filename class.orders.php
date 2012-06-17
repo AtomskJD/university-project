@@ -65,11 +65,8 @@ class ItemsHasWorkshops extends TableAccess {
         //TODO: Возможно перенести в родительский класс
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO items_has_workshops VALUES (:item_id, :workshop_id)");
-            
-            $query->bindParam(':item_id', $prop['items_item_id']);
-            $query->bindParam(':workshop_id', $prop['workshops_workshop_id']);
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query = $this->_db->prepare("INSERT INTO items_has_workshops VALUES (?, ?)");
+            $query->execute($prop) or die (print_r($query->errorInfo()) );
         }
         catch (PDOException $e){
             echo $e->getMessage();

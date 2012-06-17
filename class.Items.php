@@ -21,6 +21,15 @@ class Items extends TableAccess {
                                                             'fkey_name'=>'storage_name',
                                                             'fkey_id'=>'storage_id'     //соответствие из ВК
                                                             ) 
+                                            ),
+                                        array(
+                                            'name'  => 'unit_id',                    //что идет в таблицу
+                                            't_name'=> 'единица измерения',
+                                            'fkey'  => array(
+                                                            'fkey_table'=>'units',
+                                                            'fkey_name'=>'unit_name',
+                                                            'fkey_id'=>'unit_id'     //соответствие из ВК
+                                                            ) 
                                             )
                                     );
     public function getForeginKey($fkey)
@@ -47,8 +56,11 @@ class Items extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT item_id, item_name, storage_name FROM items INNER JOIN storages
-        ON items.storage_id = storages.storage_id";
+        $sql = "SELECT item_id, item_name, storage_name, unit_name FROM items 
+        INNER JOIN storages
+            ON items.storage_id = storages.storage_id
+        INNER JOIN units
+            ON units.unit_id = items.unit_id ORDER BY item_id";
         $query = $this->_db->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -61,8 +73,15 @@ class Items extends TableAccess {
         //TODO: Возможно перенести в родительский класс
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO items VALUES (?, ?, ?)");
-            $query->execute($prop) or die (print_r($query->errorInfo()) );
+            $query = $this->_db->prepare("INSERT INTO items(item_id, item_name, storage_id, unit_id) 
+            VALUES (:item_id, :item_name, :storage_id, :unit_id)");
+            
+            $query->bindParam(':item_id', $prop['item_id']);
+            $query->bindParam(':item_name', $prop['item_name']);
+            $query->bindParam(':storage_id', $prop['storage_id']);
+            $query->bindParam(':unit_id', $prop['unit_id']);
+            
+            $query->execute() or die (print_r($query->errorInfo()) );
         }
         catch (PDOException $e){
             echo $e->getMessage();
