@@ -44,6 +44,17 @@ abstract class TableAccess {
         return $out;
     }
     
+    function getPrimaryKey()
+    {
+        $out = array();
+        foreach ($this->table_prop as $primary_key){
+            if (array_key_exists('pkey', $primary_key)){
+                $out[] = $primary_key['name'];
+            }
+        }
+        return $out;
+    }
+    
    /**
  *  function getForeginKey($fkey)                    // TODO: заглушка для шаблона
  *     {

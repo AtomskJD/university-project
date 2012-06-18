@@ -42,7 +42,11 @@ class View {
                 break;
         }
     }
-
+    public function deleteRow($tr)
+    {
+        print_r($tr);
+    }
+    
     public function viewTitle()      // Интерфейс к getName
     {
         printf("<p>Имя таблицы: %s</p>", $this->table_class->getTitle());
@@ -73,8 +77,17 @@ class View {
     {  
         $data = $this->table_class->getData();
         echo $this->viewHeaders();
-        foreach (new TableView(new RecursiveArrayIterator($data)) as $value) {
-            echo "\r\n\t<td>$value</td>";
+        foreach ($data as $tr){
+            echo '<tr>';
+            foreach ($tr as $td){
+                echo "<td>". $td ."</td>";
+            }
+            echo "<td>";
+            foreach ($this->table_class->getPrimaryKey() as $var){
+                    echo " ". $var ." = ". $tr[$var] ." ";
+                }
+            
+            echo '</td></tr>';
         }
     }
     public function viewList($fkey)

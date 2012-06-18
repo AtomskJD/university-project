@@ -8,11 +8,13 @@ class Storages extends TableAccess {
                                         array(
                                             'name'  => 'storage_id',
                                             't_name'=> 'Номер склада',
-                                            'fkey'  => 0),
+                                            'fkey'  => 0,
+                                            'pkey'  => 1),
                                         array(
                                             'name'  => 'storage_name',
                                             't_name'=> 'Название склада',
-                                            'fkey'  => 0)
+                                            'fkey'  => 0,
+                                            'pkey'  => 1)
                                     );
 
     public function getCount()
