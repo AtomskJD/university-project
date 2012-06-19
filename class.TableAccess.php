@@ -39,8 +39,10 @@ abstract class TableAccess {
     function getHeaders()                       // Возвращает переведенные заголовки таблицы из свойств таблицы 
     {
         foreach ($this->table_prop as $headers){
-            $out[] = $headers['t_name'];
+            if ($headers['show'])
+            $out[0][] = $headers['t_name'];
         }
+        $out[0][] = 'удалить';
         return $out;
     }
     

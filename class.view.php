@@ -44,7 +44,7 @@ class View {
     }
     public function deleteRow($tr)
     {
-        print_r($tr);
+        print_r('$this->table_class->deleteRow');
     }
     
     public function viewTitle()      // Интерфейс к getName
@@ -75,20 +75,42 @@ class View {
     
     public function viewData()      // Интерфейс к getData
     {  
-        $data = $this->table_class->getData();
-        echo $this->viewHeaders();
-        foreach ($data as $tr){
-            echo '<tr>';
-            foreach ($tr as $td){
-                echo "<td>". $td ."</td>";
-            }
-            echo "<td>";
-            foreach ($this->table_class->getPrimaryKey() as $var){
-                    echo " ". $var ." = ". $tr[$var] ." ";
+        $table  = $this->table_class->getHeaders();
+        $data   = $this->table_class->getData();
+        $prop   = $this->table_class->getTableProp();
+        $i      = 0;
+        
+        var_dump($data);
+        foreach($data as $data_arr){
+            //var_dump($data_arr);
+            $i++;
+            foreach($prop as $prop_arr){
+                //var_dump($prop_arr);
+                if ($prop_arr['show']){
+                    $name = $prop_arr['name'];
+                    if ($prop_arr['fkey'])
+                        $name = $prop_arr['fkey']['fkey_name'];
+                    $table[$i+1][] = $data_arr[$name]; // вибимая часть таблицы + заголовки
                 }
-            
-            echo '</td></tr>';
+                if (isset($prop_arr['pkey'])){
+                    $name = $prop_arr['name'];
+                    
+                    $pkeys[$i][] = $data_arr[$name];
+                }
+            }
+            // тут ссылка на удаление
+            $table[$i+1][] = "<a href=$this->selfpath&delete=". implode('-',$pkeys[$i]) .">удалить</a>";   
         }
+        //echo $this->viewHeaders();
+        foreach ($table as $tr){
+            echo '<tr>';
+                foreach ($tr as $td){
+                    echo "<td>$td</td>";
+                }
+            echo '</tr>';
+        }
+        
+        
     }
     public function viewList($fkey)
     {
@@ -111,12 +133,14 @@ class View {
 
         $prop = $this->table_class->getTableProp();
         $prop_num = count($prop);
-    
         if ($_SERVER['REQUEST_METHOD'] != 'POST'){ // ЕСЛИ GET
+            if (isset($_GET['delete'])){
+                echo $_GET['delete'];
+            }
             // echo $prop_num;
             $out = "<form accept-charset='utf8' action='". $this->selfpath ."' method='post'>\n";
             for ($i=0; $i<$prop_num; $i++){
-                if (isset($prop[$i]['hide']) ) continue;
+                if (isset($prop[$i]['hide']) or !$prop[$i]['show'] ) continue;
                 if (!$prop[$i]['fkey']){
                     $out .= "<p>"
                     . $prop[$i]['t_name']

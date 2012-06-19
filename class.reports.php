@@ -8,6 +8,8 @@ class Reports extends TableAccess {
                                         array(
                                             'name'  => 'workshop_id',                    //что идет в таблицу
                                             't_name'=> 'Название цеха',
+                                            'show'  => 1,
+                                            'pkey'  => 1,
                                             'fkey'  => array(
                                                             'fkey_table'=>'workshops',
                                                             'fkey_name'=>'workshop_name',
@@ -17,6 +19,8 @@ class Reports extends TableAccess {
                                         array(
                                             'name'  => 'report_id',                    //что идет в таблицу
                                             't_name'=> 'Номер отчета',
+                                            'show'  => 1,
+                                            'pkey'  => 1,
                                             'fkey'  => array(
                                                             'fkey_table' => 'reports_list',
                                                             'fkey_name' => 'report_id',
@@ -26,6 +30,8 @@ class Reports extends TableAccess {
                                         array(
                                             'name'  => 'item_id',                    //что идет в таблицу
                                             't_name'=> 'Продукт',
+                                            'show'  => 1,
+                                            'pkey'  => 1,
                                             'fkey'  => array(
                                                             'fkey_table' => 'items',
                                                             'fkey_name' => 'item_name',
@@ -35,12 +41,14 @@ class Reports extends TableAccess {
                                          array(
                                             'name'  => 'report_quantity',                    //что идет в таблицу
                                             't_name'=> 'Объем продукции',
+                                            'show'  => 1,
                                             'fkey'  => 0
                                             ),
                                          array(
                                             'name'  => 'unit_name',                    //что идет в таблицу
                                             't_name'=> 'ед. измерения',
                                             'fkey'  => 0,
+                                            'show'  => 0,
                                             'hide'  => 1
                                             )
                                     );
@@ -68,7 +76,7 @@ class Reports extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT workshop_name, report_id, item_name, report_quantity, unit_name FROM reports
+        $sql = "SELECT * FROM reports
                 INNER JOIN items
                     ON items.item_id = reports.item_id
                 INNER JOIN workshops

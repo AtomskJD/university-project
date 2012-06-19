@@ -9,12 +9,13 @@ class Storages extends TableAccess {
                                             'name'  => 'storage_id',
                                             't_name'=> 'Номер склада',
                                             'fkey'  => 0,
-                                            'pkey'  => 1),
+                                            'pkey'  => 1,
+                                            'show'  => 1),
                                         array(
                                             'name'  => 'storage_name',
                                             't_name'=> 'Название склада',
                                             'fkey'  => 0,
-                                            'pkey'  => 1)
+                                            'show'  => 1)
                                     );
 
     public function getCount()
@@ -33,7 +34,7 @@ class Storages extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT * FROM storages";
+        $sql = "SELECT *, 1+1 FROM storages";
         $query = $this->_db->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
