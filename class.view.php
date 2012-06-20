@@ -36,6 +36,10 @@ class View {
                 $this->table_class = new Reports();
                 $this->selfpath .="?id=reports";
                 break;
+            case 'units':
+                $this->table_class = new Units();
+                $this->selfpath .="?id=units";
+                break;
             
             default:
                 $this->table_class = new Storages();

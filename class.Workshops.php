@@ -8,10 +8,13 @@ class Workshops extends TableAccess {
                                     array(
                                         'name'  => 'workshop_id',
                                         't_name'=> 'Номер цеха',
+                                        'show'  => 1,
+                                        'pkey'  => 1,
                                         'fkey'  => 0),
                                     array(
                                         'name'  => 'workshop_name',
                                         't_name'=> 'Название цеха',
+                                        'show'  => 1,
                                         'fkey'  => 0)
                                     );
 
@@ -43,12 +46,23 @@ class Workshops extends TableAccess {
         // Запись данных в таблицу
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO workshops VALUES (?, ?)");
-            $query->execute($prop) or die (print_r($query->errorInfo()));
+            $query = $this->_db->prepare("INSERT INTO workshops(workshop_id, workshop_name) VALUES (:workshop_id, :workshop_name)");
+            $query->bindParam('workshop_id', $prop['workshop_id']);
+            $query->bindParam('workshop_name', $prop['workshop_name']);
+            
+            $query->execute() or die (print_r($query->errorInfo()));
         }
         catch (PDOException $e){
             echo $e->getMessage();
         }
+    }
+    
+    public function deleteRow($param)
+    {
+        $query = $this->_db->prepare("DELETE FROM workshops WHERE workshop_id = :workshop_id");
+        $query->bindParam(':workshop_id', $param[0]);
+        
+        $query->execute() or die(print_r($query->errorInfo()));
     }
 }
 ?>

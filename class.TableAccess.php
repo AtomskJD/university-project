@@ -19,6 +19,7 @@ abstract class TableAccess {
     abstract public function getData();         // Возврат значений таблицы
     abstract public function getCount();        // Возвращает число записей
     abstract public function setData($prop);    // Вставка данных
+    abstract public function deleteRow($param); // Удаление строки из представления
     
     
     public function getTitle()                  // Заголовок таблицы

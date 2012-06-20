@@ -34,7 +34,7 @@ class Storages extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT *, 1+1 FROM storages";
+        $sql = "SELECT * FROM storages";
         $query = $this->_db->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);

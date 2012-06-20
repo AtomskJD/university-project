@@ -8,14 +8,18 @@ class Items extends TableAccess {
                                         array(
                                             'name'  => 'item_id',
                                             't_name'=> 'Номер товара',
+                                            'show'  => 1,
+                                            'pkey'  => 1,
                                             'fkey'  => 0),
                                         array(
                                             'name'  => 'item_name',
                                             't_name'=> 'Название товара',
+                                            'show'  => 1,
                                             'fkey'  => 0),
                                         array(
                                             'name'  => 'storage_id',                    //что идет в таблицу
                                             't_name'=> 'Название склада',
+                                            'show'  => 1,
                                             'fkey'  => array(
                                                             'fkey_table'=>'storages',
                                                             'fkey_name'=>'storage_name',
@@ -25,6 +29,7 @@ class Items extends TableAccess {
                                         array(
                                             'name'  => 'unit_id',                    //что идет в таблицу
                                             't_name'=> 'единица измерения',
+                                            'show'  => 1,
                                             'fkey'  => array(
                                                             'fkey_table'=>'units',
                                                             'fkey_name'=>'unit_name',
@@ -86,6 +91,14 @@ class Items extends TableAccess {
         catch (PDOException $e){
             echo $e->getMessage();
         }
+    }
+    
+    public function deleteRow($param)
+    {
+        $query = $this->_db->prepare("DELETE FROM items WHERE item_id = :item_id");
+        $query->bindParam(':item_id', $param[0]);
+        
+        $query->execute() or die(print_r($query->errorInfo()));
     }
 }
 ?>

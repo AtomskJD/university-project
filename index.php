@@ -24,6 +24,7 @@ header("Content-type: text/html; charset=utf-8");
 <div id="nav">
  <a href="?id=storages">Склады</a><br />
  <a href="?id=workshops">Цеха</a><br />
+ <a href="?id=units">Ед. измерения</a><br />
  <a href="?id=items">Продукция</a><br />
  <a href="?id=itemshasworkshops">Продукция - Цеха</a><br />
  <a href="?id=reportslist">Отчеты по цехам</a><br />
