@@ -46,12 +46,22 @@ class Storages extends TableAccess {
         // Запись данных в таблицу
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO storages VALUES (?, ?)");
-            $query->execute($prop) or die (print_r($query->errorInfo()) );
+            $query = $this->_db->prepare("INSERT INTO storages VALUES (:storage_id, :storage_name)");
+            $query->bindParam(':storage_id', $prop['storage_id']);
+            $query->bindParam(':storage_name', $prop['storage_name']);
+            
+            $query->execute() or die (print_r($query->errorInfo()) );
         }
         catch (PDOException $e){
             echo $e->getMessage();
         }
+    }
+    
+    public function deleteRow($param)
+    {
+        $query = $this->_db->prepare("DELETE FROM storages WHERE storage_id = :storage_id");
+        $query->bindParam(':storage_id', $param[0]);
+        $query->execute() or die (print_r($query->errorInfo()) );
     }
 }
 ?>

@@ -42,9 +42,12 @@ class View {
                 break;
         }
     }
-    public function deleteRow($tr)
+    public function getDelete($tr)
     {
-        print_r('$this->table_class->deleteRow');
+        $arr = explode('-', $tr);
+        $this->table_class->deleteRow($arr);
+        header('Location:'.$this->selfpath);
+        
     }
     
     public function viewTitle()      // Интерфейс к getName
@@ -80,7 +83,7 @@ class View {
         $prop   = $this->table_class->getTableProp();
         $i      = 0;
         
-        var_dump($data);
+        //var_dump($data);
         foreach($data as $data_arr){
             //var_dump($data_arr);
             $i++;
@@ -135,7 +138,7 @@ class View {
         $prop_num = count($prop);
         if ($_SERVER['REQUEST_METHOD'] != 'POST'){ // ЕСЛИ GET
             if (isset($_GET['delete'])){
-                echo $_GET['delete'];
+                $this->getDelete($_GET['delete']);
             }
             // echo $prop_num;
             $out = "<form accept-charset='utf8' action='". $this->selfpath ."' method='post'>\n";
