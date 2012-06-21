@@ -54,11 +54,11 @@ class reportsList extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT workshop_id, workshop_name, report_id, report_date FROM reports_list
+        $sql = "SELECT reports_list.workshop_id, workshop_name, report_id, report_date FROM reports_list
                     INNER JOIN workshops
                         ON workshops.workshop_id = reports_list.workshop_id";
         $query = $this->_db->prepare($sql);
-        $query->execute();
+        $query->execute() or die(print_r($query->errorInfo()) ) ;
         $query->setFetchMode(PDO::FETCH_ASSOC);
         return $query->fetchAll();
     }
