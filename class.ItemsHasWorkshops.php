@@ -6,8 +6,10 @@ class ItemsHasWorkshops extends TableAccess {
     protected $table_count  = "none";
     protected $table_prop   = array(                                       
                                         array(
-                                            'name'  => 'items_item_id',                    //что идет в таблицу
+                                            'name'  => 'items_item_id',                    //что идет в таблицу $param[0]
                                             't_name'=> 'Название продукции',
+                                            'show'  => 1,
+                                            'pkey'  => 1,
                                             'fkey'  => array(
                                                             'fkey_table'=>'items',
                                                             'fkey_name'=>'item_name',
@@ -15,8 +17,10 @@ class ItemsHasWorkshops extends TableAccess {
                                                             ) 
                                             ),
                                         array(
-                                            'name'  => 'workshops_workshop_id',                    //что идет в таблицу
+                                            'name'  => 'workshops_workshop_id',                    //что идет в таблицу $param[1]
                                             't_name'=> 'Название цеха',
+                                            'show'  => 1,
+                                            'pkey'  => 1,
                                             'fkey'  => array(
                                                             'fkey_table'=>'workshops',
                                                             'fkey_name'=>'workshop_name',
@@ -48,7 +52,7 @@ class ItemsHasWorkshops extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT item_name, workshop_name FROM items_has_workshops 
+        $sql = "SELECT items_item_id, workshops_workshop_id, item_name, workshop_name FROM items_has_workshops 
             INNER JOIN items
                 ON items_has_workshops.items_item_id = items.item_id
             INNER JOIN workshops
@@ -74,6 +78,16 @@ class ItemsHasWorkshops extends TableAccess {
         catch (PDOException $e){
             echo $e->getMessage();
         }
+    }
+    
+    public function deleteRow($param)
+    {
+        //var_dump($param);exit;
+        $query = $this->_db->prepare("DELETE FROM items_has_workshops WHERE items_item_id = :items_item_id AND workshops_workshop_id = :workshops_workshop_id");
+        $query->bindParam(':items_item_id', $param[0]);
+        $query->bindParam(':workshops_workshop_id', $param[1]);
+        
+        $query->execute() or die(print_r($query->errorInfo()) );
     }
 }
 ?>

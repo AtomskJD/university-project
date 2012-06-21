@@ -8,6 +8,8 @@ class reportsList extends TableAccess {
                                         array(
                                             'name'  => 'workshop_id',                    //что идет в таблицу
                                             't_name'=> 'Название цеха',
+                                            'show'  => 1,
+                                            'pkey'  => 1,
                                             'fkey'  => array(
                                                             'fkey_table'=>'workshops',
                                                             'fkey_name'=>'workshop_name',
@@ -17,11 +19,14 @@ class reportsList extends TableAccess {
                                         array(
                                             'name'  => 'report_id',                    //что идет в таблицу
                                             't_name'=> 'номер отчета',
+                                            'show'  => 1,
+                                            'pkey'  => 1,
                                             'fkey'  => 0
                                             ),
                                         array(
                                             'name'  => 'report_date',                    //что идет в таблицу
                                             't_name'=> 'Дата отчета',
+                                            'show'  => 1,
                                             'fkey'  => 0
                                             )
                                     );
@@ -36,7 +41,7 @@ class reportsList extends TableAccess {
     public function getCount()
     {
         try {   
-            $query = $this->_db->prepare("SELECT COUNT(*) FROM reports_llist");
+            $query = $this->_db->prepare("SELECT COUNT(*) FROM reports_list");
             $query->execute() or die ("ERROR");
             $result = $query->fetch(PDO::FETCH_NUM);
             return $result[0];
@@ -49,7 +54,7 @@ class reportsList extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT workshop_name, report_id, report_date FROM reports_list
+        $sql = "SELECT workshop_id, workshop_name, report_id, report_date FROM reports_list
                     INNER JOIN workshops
                         ON workshops.workshop_id = reports_list.workshop_id";
         $query = $this->_db->prepare($sql);
@@ -61,15 +66,26 @@ class reportsList extends TableAccess {
     public function setData($prop)
     {
         // Запись данных в таблицу
-        //TODO: Возможно перенести в родительский класс
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO reports_list VALUES (?, ?)");
-            $query->execute($prop) or die (print_r($query->errorInfo()) );
+            $query = $this->_db->prepare("INSERT INTO reports_list(workshop_id, report_id, report_date) VALUES (:workshop_id, :report_id, report_date)");
+            $query->bindParam(':workshop_id', $prop['workshop_id']);
+            $query->bindParam(':report_id', $prop['report_id']);
+            $query->bindParam(':report_date', $prop['report_date']);
+            
+            $query->execute() or die (print_r($query->errorInfo()) );
         }
         catch (PDOException $e){
             echo $e->getMessage();
         }
+    }
+    public function deleteRow($param)
+    {
+        $query = $this->_db->prepare("DELETE FROM reports_list WHERE report_id = :report_id AND workshop_id = :workshop_id");
+        $query->bindParam(':workshop_id', $param[0]);
+        $query->bindParam(':report_id', $param[1]);
+        
+        $query->execute() or die($query->errorInfo());
     }
 }
 ?>

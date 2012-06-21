@@ -93,7 +93,7 @@ class View {
             $i++;
             foreach($prop as $prop_arr){
                 //var_dump($prop_arr);
-                if ($prop_arr['show']){
+                if ($prop_arr['show']){         //TODO: возможно проверка на принадлежность списку свойств (ненужные поля)
                     $name = $prop_arr['name'];
                     if ($prop_arr['fkey'])
                         $name = $prop_arr['fkey']['fkey_name'];
@@ -101,8 +101,16 @@ class View {
                 }
                 if (isset($prop_arr['pkey'])){
                     $name = $prop_arr['name'];
+                    try{
+                        if (!array_key_exists($name, $data_arr))
+                            throw new Exception("Забыл прописать поле <strong>$name</strong> для таблицы ". $this->table_class->getTableName() ." (смотри <strong>class::". get_class($this->table_class) ."->getData ==> SELECT</strong>)<br />\n");
+                            
+                            $pkeys[$i][] = $data_arr[$name];
+                            
+                    } catch (Exception $e){
+                        echo "!ВНИМАНИЕ!". $e->getMessage();
+                    }
                     
-                    $pkeys[$i][] = $data_arr[$name];
                 }
             }
             // тут ссылка на удаление
@@ -165,7 +173,7 @@ class View {
         } 
         else { // ЕСЛИ POST
             for ($i=0; $i < $prop_num; $i++) { 
-                $name = $prop[$i]['name'];      // TODO: у нас есть имя поля таблицы но мы его пока не передаем
+                $name = $prop[$i]['name'];
                 $arr[$name] = $_POST[$name];
             }
             var_dump($arr);

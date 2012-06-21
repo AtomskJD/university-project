@@ -21,6 +21,10 @@ abstract class TableAccess {
     abstract public function setData($prop);    // Вставка данных
     abstract public function deleteRow($param); // Удаление строки из представления
     
+    public function getTableName()
+    {
+        return $this->table_name;
+    }
     
     public function getTitle()                  // Заголовок таблицы
     {
