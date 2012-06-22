@@ -1,8 +1,8 @@
 <?php
 class reportsList extends TableAccess {
     protected $table_name   = "items_has_workshops";
-    protected $table_title  = "Какими цехами какой товар производится";
-    protected $table_info   = "таблица производственного отношения продукции и цеха производства";
+    protected $table_title  = "Список отчетов";
+    protected $table_info   = "Отчет создается в этой таблице";
     protected $table_count  = "none";
     protected $table_prop   = array(                                       
                                         array(
@@ -68,7 +68,7 @@ class reportsList extends TableAccess {
         // Запись данных в таблицу
         try {
             var_dump($prop);
-            $query = $this->_db->prepare("INSERT INTO reports_list(workshop_id, report_id, report_date) VALUES (:workshop_id, :report_id, report_date)");
+            $query = $this->_db->prepare("INSERT INTO reports_list(workshop_id, report_id, report_date) VALUES (:workshop_id, :report_id, :report_date)");
             $query->bindParam(':workshop_id', $prop['workshop_id']);
             $query->bindParam(':report_id', $prop['report_id']);
             $query->bindParam(':report_date', $prop['report_date']);

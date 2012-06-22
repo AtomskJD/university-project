@@ -1,8 +1,8 @@
 <?php
 class Reports extends TableAccess {
     protected $table_name   = "reports";
-    protected $table_title  = "Отчеты цехов";
-    protected $table_info   = "Отчеты цехов";
+    protected $table_title  = "Товары отчетов";
+    protected $table_info   = "Список продукции к отчету цеха";
     protected $table_count  = "none";
     protected $table_prop   = array(                                       
                                         array(
@@ -48,7 +48,7 @@ class Reports extends TableAccess {
                                             'name'  => 'unit_name',                    //что идет в таблицу
                                             't_name'=> 'ед. измерения',
                                             'fkey'  => 0,
-                                            'show'  => 0,
+                                            'show'  => 1,
                                             'hide'  => 1
                                             )
                                     );
@@ -91,7 +91,7 @@ class Reports extends TableAccess {
 
     public function setData($prop)
     {
-        $date = date('Y-m-d');
+        //$date = date('Y-m-d');
         // Запись данных в таблицу
         //TODO: Возможно перенести в родительский класс
         try {
@@ -111,6 +111,16 @@ class Reports extends TableAccess {
         catch (PDOException $e){
             echo $e->getMessage();
         }
+    }
+    
+    public function deleteRow($param)
+    {
+        $query = $this->_db->prepare("DELETE FROM reports WHERE report_id = :report_id AND workshop_id = :workshop_id AND item_id = :item_id");
+        $query->bindParam(':workshop_id', $param[0]);
+        $query->bindParam(':report_id', $param[1]);
+        $query->bindParam(':item_id', $param[2]);
+        
+        $query->execute() or die(print_r($query->errorInfo()) );
     }
 }
 ?>

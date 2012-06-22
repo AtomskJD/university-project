@@ -36,6 +36,10 @@ class View {
                 $this->table_class = new Reports();
                 $this->selfpath .="?id=reports";
                 break;
+            case 'orders':
+                $this->table_class = new Orders();
+                $this->selfpath .="?id=orders";
+                break;
             case 'units':
                 $this->table_class = new Units();
                 $this->selfpath .="?id=units";
@@ -48,7 +52,7 @@ class View {
     }
     public function getDelete($tr)
     {
-        $arr = explode('-', $tr);
+        $arr = explode('|', $tr);
         $this->table_class->deleteRow($arr);
         header('Location:'.$this->selfpath);
         
@@ -93,7 +97,7 @@ class View {
             $i++;
             foreach($prop as $prop_arr){
                 //var_dump($prop_arr);
-                if ($prop_arr['show']){         //TODO: возможно проверка на принадлежность списку свойств (ненужные поля)
+                if ($prop_arr['show']){         //TODO: возможно проверка на принадлежность списку свойств заменит проверку SHOW(ненужные поля) 
                     $name = $prop_arr['name'];
                     if ($prop_arr['fkey'])
                         $name = $prop_arr['fkey']['fkey_name'];
@@ -114,7 +118,7 @@ class View {
                 }
             }
             // тут ссылка на удаление
-            $table[$i+1][] = "<a href=$this->selfpath&delete=". implode('-',$pkeys[$i]) .">удалить</a>";   
+            $table[$i+1][] = "<a href=$this->selfpath&delete=". implode('|',$pkeys[$i]) .">удалить</a>";   
         }
         //echo $this->viewHeaders();
         foreach ($table as $tr){
@@ -172,8 +176,9 @@ class View {
         echo $out;
         } 
         else { // ЕСЛИ POST
-            for ($i=0; $i < $prop_num; $i++) { 
+            for ($i=0; $i < $prop_num; $i++) {
                 $name = $prop[$i]['name'];
+                if(array_key_exists('hide', $prop[$i])) continue;
                 $arr[$name] = $_POST[$name];
             }
             var_dump($arr);
