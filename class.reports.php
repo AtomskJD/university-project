@@ -95,7 +95,7 @@ class Reports extends TableAccess {
         // Запись данных в таблицу
         //TODO: Возможно перенести в родительский класс
         try {
-            var_dump($prop);
+            //var_dump($prop);
             
             $query = $this->_db->prepare("
             INSERT INTO reports(report_id, workshop_id, item_id, report_quantity)
