@@ -1,8 +1,8 @@
 -- BEGIN MAIN PART
-SELECT MONTHNAME(output_date) AS output_month, MONTHNAME(report_date) AS report_month, item_name, unit_name, order_quantity, summ FROM (
+SELECT MONTHNAME(output_date) AS output_month, MONTHNAME(report_date) AS report_month, item_name, unit_name, order_quantity, summ, summ-order_quantity AS excess FROM (
     SELECT * FROM orders
         
-        LEFT OUTER JOIN (SELECT * FROM order_join) j1
+        LEFT OUTER JOIN (SELECT * FROM order_join) j1 -- use select from view
             
             ON orders.item_id=j1.item_id_rep AND MONTH(orders.output_date)=MONTH(j1.report_date)
         

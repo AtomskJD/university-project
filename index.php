@@ -30,6 +30,7 @@ header("Content-type: text/html; charset=utf-8");
  <a href="?id=itemshasworkshops">Продукция - Цеха</a><br />
  <a href="?id=reportslist">Список отчетов</a><br />
  <a href="?id=reports">Список продукции к отчету</a><br />
+ <a href="?id=audit">Анализ</a><br />
  
 </div>
 <div id="main">

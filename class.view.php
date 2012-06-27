@@ -44,6 +44,10 @@ class View {
                 $this->table_class = new Units();
                 $this->selfpath .="?id=units";
                 break;
+            case 'audit':
+                $this->table_class = new Audit();
+                $this->selfpath .="?id=audit";
+                break;
             
             default:
                 $this->table_class = new Storages();
@@ -101,9 +105,12 @@ class View {
                     $name = $prop_arr['name'];
                     if ($prop_arr['fkey'])
                         $name = $prop_arr['fkey']['fkey_name'];
-                    $table[$i+1][] = $data_arr[$name]; // вибимая часть таблицы + заголовки
+                        
+                        if (!isset($data_arr[$name]))
+                            $data_arr[$name] = '---';
+                    $table[$i+1][] = $data_arr[$name]; // видимая часть таблицы + заголовки
                 }
-                if (isset($prop_arr['pkey'])){
+                if (isset($prop_arr['pkey'])){ // Примари ключи для удаления
                     $name = $prop_arr['name'];
                     try{
                         if (!array_key_exists($name, $data_arr))
