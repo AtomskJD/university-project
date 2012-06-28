@@ -4,7 +4,14 @@ class Reports extends TableAccess {
     protected $table_title  = "Товары отчетов";
     protected $table_info   = "Список продукции к отчету цеха";
     protected $table_count  = "none";
-    protected $table_prop   = array(                                       
+    protected $table_prop   = array(
+                                        array(
+                                            'name'  => 'report_date_month',                    //что идет в таблицу
+                                            't_name'=> 'Месяц выпуска',
+                                            'show'  => 1,
+                                            'hide'  => 1,
+                                            'fkey'  => 0 
+                                            ),                                       
                                         array(
                                             'name'  => 'workshop_id',                    //что идет в таблицу
                                             't_name'=> 'Название цеха',
@@ -76,13 +83,19 @@ class Reports extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT * FROM reports
+        $sql = "
+        SELECT reports.report_id, reports.workshop_id, reports.item_id, report_quantity, report_date, item_name, workshop_name, items.unit_id, unit_name, MONTHNAME(report_date) AS report_date_month  
+        FROM reports
+                INNER JOIN reports_list
+                    ON reports_list.report_id = reports.report_id AND reports_list.workshop_id = reports.workshop_id
                 INNER JOIN items
                     ON items.item_id = reports.item_id
                 INNER JOIN workshops
                     ON workshops.workshop_id = reports.workshop_id
                 INNER JOIN units
-                    ON items.unit_id = units.unit_id";
+                    ON items.unit_id = units.unit_id 
+                    
+        ORDER BY MONTH(report_date), reports.workshop_id, reports.report_id";
         $query = $this->_db->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -91,12 +104,8 @@ class Reports extends TableAccess {
 
     public function setData($prop)
     {
-        //$date = date('Y-m-d');
-        // Запись данных в таблицу
-        //TODO: Возможно перенести в родительский класс
         try {
-            //var_dump($prop);
-            
+            var_dump($prop);
             $query = $this->_db->prepare("
             INSERT INTO reports(report_id, workshop_id, item_id, report_quantity)
                 VALUES (:report_id, :workshop_id, :item_id, :report_quantity)
@@ -120,7 +129,7 @@ class Reports extends TableAccess {
         $query->bindParam(':report_id', $param[1]);
         $query->bindParam(':item_id', $param[2]);
         
-        $query->execute() or die(print_r($query->errorInfo()) );
+        $query->execute() or die(print_r($query->errorInfo()));
     }
 }
 ?>

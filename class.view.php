@@ -59,6 +59,7 @@ class View {
         $arr = explode('|', $tr);
         $this->table_class->deleteRow($arr);
         header('Location:'.$this->selfpath);
+        exit();
         
     }
     
@@ -89,7 +90,9 @@ class View {
     }
     
     public function viewData()      // Интерфейс к getData
-    {  
+    {
+        if (($_SERVER['REQUEST_METHOD'] != 'POST') and (!isset($_GET['delete']))){
+        
         $table  = $this->table_class->getHeaders();
         $data   = $this->table_class->getData();
         $prop   = $this->table_class->getTableProp();
@@ -136,7 +139,7 @@ class View {
             echo '</tr>';
         }
         
-        
+    }    
     }
     public function viewList($fkey)
     {
@@ -188,9 +191,10 @@ class View {
                 if(array_key_exists('hide', $prop[$i])) continue;
                 $arr[$name] = $_POST[$name];
             }
-            var_dump($arr);
+            //var_dump($arr);
             $this->table_class->setData($arr);
             header("Location: ".$this->selfpath);
+            exit();
         }
 
     }

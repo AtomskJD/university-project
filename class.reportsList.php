@@ -4,7 +4,14 @@ class reportsList extends TableAccess {
     protected $table_title  = "Список отчетов";
     protected $table_info   = "Отчет создается в этой таблице";
     protected $table_count  = "none";
-    protected $table_prop   = array(                                       
+    protected $table_prop   = array(
+                                        array(
+                                            'name'  => 'report_month',                    //что идет в таблицу
+                                            't_name'=> 'Месяц сдачи',
+                                            'show'  => 1,
+                                            'fkey'  => 0,
+                                            'hide'  => 1
+                                            ),                                       
                                         array(
                                             'name'  => 'workshop_id',                    //что идет в таблицу
                                             't_name'=> 'Название цеха',
@@ -28,6 +35,13 @@ class reportsList extends TableAccess {
                                             't_name'=> 'Дата отчета',
                                             'show'  => 1,
                                             'fkey'  => 0
+                                            ),
+                                        array(
+                                            'name'  => 'goods_quantity',                    //что идет в таблицу
+                                            't_name'=> 'Кол-во позиций в накладной',
+                                            'show'  => 1,
+                                            'fkey'  => 0,
+                                            'hide'  => 1
                                             )
                                     );
     public function getForeginKey($fkey)
@@ -54,9 +68,12 @@ class reportsList extends TableAccess {
 	public function getData()
     {
         //Получаем данные из таблицы
-        $sql = "SELECT reports_list.workshop_id, workshop_name, report_id, report_date FROM reports_list
+        $sql = "SELECT reports_list.workshop_id, workshop_name, report_id, report_date, MONTHNAME(report_date) AS report_month,
+        (SELECT COUNT(*) FROM reports WHERE reports.report_id = reports_list.report_id AND reports.workshop_id = reports_list.workshop_id) AS goods_quantity
+         FROM reports_list
                     INNER JOIN workshops
-                        ON workshops.workshop_id = reports_list.workshop_id";
+                        ON workshops.workshop_id = reports_list.workshop_id
+        ORDER BY MONTH(report_date), reports_list.workshop_id, report_id";
         $query = $this->_db->prepare($sql);
         $query->execute() or die(print_r($query->errorInfo()) ) ;
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -85,7 +102,7 @@ class reportsList extends TableAccess {
         $query->bindParam(':workshop_id', $param[0]);
         $query->bindParam(':report_id', $param[1]);
         
-        $query->execute() or die($query->errorInfo());
+        $query->execute() or die(print_r($query->errorInfo()));
     }
 }
 ?>
