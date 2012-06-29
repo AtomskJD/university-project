@@ -29,7 +29,7 @@ class Orders extends TableAccess {
                                          ),
                                          array(
                                             'name'  => 'output_date',
-                                            't_name'=> 'дедлайн',
+                                            't_name'=> 'Дата выпуска',
                                             'show'  => 1,
                                             'pkey'  => 1,
                                             'fkey'  => 0
@@ -78,7 +78,8 @@ class Orders extends TableAccess {
                 INNER JOIN workshops
                     ON workshops.workshop_id = orders.workshop_id
                 INNER JOIN units
-                    ON items.unit_id = units.unit_id";
+                    ON items.unit_id = units.unit_id
+            ORDER BY output_date, orders.workshop_id, orders.item_id";
         $query = $this->_db->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -102,7 +103,7 @@ class Orders extends TableAccess {
             $query->bindParam(':item_id',       $prop['item_id']);
             $query->bindParam(':output_date',   $prop['output_date']);
             
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query->execute() or die (print_r($query->errorInfo()) . ' <a href="?id=orders">НАЗАД</a>');
         }
         catch (PDOException $e){
             echo $e->getMessage();
@@ -116,7 +117,7 @@ class Orders extends TableAccess {
         $query->bindParam(':item_id',       $param[1]);
         $query->bindParam(':output_date',   $param[2]);
         
-        $query->execute() or die(print_r($query->errorInfo()) );
+        $query->execute() or die(print_r($query->errorInfo()) . ' <a href="?id=orders">НАЗАД</a>');
     }
 }
 ?>

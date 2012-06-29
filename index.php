@@ -13,32 +13,33 @@ header("Content-type: text/html; charset=utf-8");
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <title>untitled</title>
 <meta name="description" content="content" />
-<link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="/css/print.css" type="text/css" media="print" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 <link rel="Shortcut Icon" href="/favicon.ico" type="image/x-icon" />
 </head>
 <body>
 <div id="header">
  
-</div>
+
+
 <div id="nav">
- <a href="?id=orders">Заказ</a><br />
- <a href="?id=storages">Склады</a><br />
- <a href="?id=workshops">Цеха</a><br />
- <a href="?id=units">Ед. измерения</a><br />
- <a href="?id=items">Продукция</a><br />
- <a href="?id=itemshasworkshops">Продукция - Цеха</a><br />
- <a href="?id=reportslist">Список отчетов</a><br />
- <a href="?id=reports">Список продукции к отчету</a><br />
- <a href="?id=audit">Анализ</a><br />
- 
+    <span title="список складов"><a href="?id=storages">Склады</a> |</span>
+    <span title="список цехов"><a href="?id=workshops">Цеха</a> |</span>
+    <span title="список единиц измерения"><a href="?id=units">Ед. измерения</a> |</span>
+    <span title="список выпускаемой продукции"><a href="?id=items">Продукция</a> |</span>
+    <span title="список выпускаемой цехами продукции"><a href="?id=itemshasworkshops">Продукция - Цеха</a> |</span>
+    <span title="список заявок"><a href="?id=orders">ЗАЯВКИ</a> |</span>
+    <span title="список накладных"><a href="?id=reportslist">Список накладных</a> |</span>
+    <span title="список продукции в накладных"><a href="?id=reports">Содержание накладных</a> |</span>
+    <span title="список отчетов цехов"><a href="?id=audit">ОТЧЕТЫ</a></span>
+ </div>
 </div>
 <div id="main">
- <?php $view->viewTitle(); ?>
- <?php $view->viewInfo(); ?>
- <p><table border=1><?php $view->viewData(); ?></table></p>
- <hr>
- <?php $view->setDataForm(); ?>
+    <?php $view->viewTitle(); ?>
+    <?php $view->viewInfo(); ?>
+    
+    <p><table><?php $view->viewData(); ?></table></p>
+    <hr>
+    <?php $view->setDataForm(); ?>
 </div>
 <div id="footer">
  

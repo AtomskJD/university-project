@@ -50,7 +50,7 @@ class Workshops extends TableAccess {
             $query->bindParam('workshop_id', $prop['workshop_id']);
             $query->bindParam('workshop_name', $prop['workshop_name']);
             
-            $query->execute() or die (print_r($query->errorInfo()));
+            $query->execute() or die (print_r($query->errorInfo()) . ' <a href="?id=workshops">НАЗАД</a>');
         }
         catch (PDOException $e){
             echo $e->getMessage();
@@ -62,7 +62,7 @@ class Workshops extends TableAccess {
         $query = $this->_db->prepare("DELETE FROM workshops WHERE workshop_id = :workshop_id");
         $query->bindParam(':workshop_id', $param[0]);
         
-        $query->execute() or die(print_r($query->errorInfo()));
+        $query->execute() or die(print_r($query->errorInfo()). ' <a href="?id=workshops">НАЗАД</a>');
     }
 }
 ?>

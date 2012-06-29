@@ -50,7 +50,7 @@ class Storages extends TableAccess {
             $query->bindParam(':storage_id', $prop['storage_id']);
             $query->bindParam(':storage_name', $prop['storage_name']);
             
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query->execute() or die (print_r($query->errorInfo()) . ' <a href="?id=storages">НАЗАД</a>');
         }
         catch (PDOException $e){
             echo $e->getMessage();
@@ -61,7 +61,7 @@ class Storages extends TableAccess {
     {
         $query = $this->_db->prepare("DELETE FROM storages WHERE storage_id = :storage_id");
         $query->bindParam(':storage_id', $param[0]);
-        $query->execute() or die (print_r($query->errorInfo()) );
+        $query->execute() or die (print_r($query->errorInfo()) . ' <a href="?id=storages">НАЗАД</a>');
     }
 }
 ?>

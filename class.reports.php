@@ -1,8 +1,8 @@
 <?php
 class Reports extends TableAccess {
     protected $table_name   = "reports";
-    protected $table_title  = "Товары отчетов";
-    protected $table_info   = "Список продукции к отчету цеха";
+    protected $table_title  = "Список продукции по накладной цеха";
+    protected $table_info   = "Наполнение накладной продукцией цеха";
     protected $table_count  = "none";
     protected $table_prop   = array(
                                         array(
@@ -84,7 +84,7 @@ class Reports extends TableAccess {
     {
         //Получаем данные из таблицы
         $sql = "
-        SELECT reports.report_id, reports.workshop_id, reports.item_id, report_quantity, report_date, item_name, workshop_name, items.unit_id, unit_name, MONTHNAME(report_date) AS report_date_month  
+        SELECT reports.report_id, reports.workshop_id, reports.item_id, report_quantity, report_date, item_name, workshop_name, items.unit_id, unit_name, MONTHNAME(report_date) AS report_date_month, CONCAT(report_quantity, ' ', unit_name) AS quantity
         FROM reports
                 INNER JOIN reports_list
                     ON reports_list.report_id = reports.report_id AND reports_list.workshop_id = reports.workshop_id
@@ -115,7 +115,7 @@ class Reports extends TableAccess {
             $query->bindParam(':report_quantity', $prop['report_quantity']);
             $query->bindParam(':item_id', $prop['item_id']);
             
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query->execute() or die (print_r($query->errorInfo()) . ' <a href="?id=reports">НАЗАД</a>');
         }
         catch (PDOException $e){
             echo $e->getMessage();
@@ -129,7 +129,7 @@ class Reports extends TableAccess {
         $query->bindParam(':report_id', $param[1]);
         $query->bindParam(':item_id', $param[2]);
         
-        $query->execute() or die(print_r($query->errorInfo()));
+        $query->execute() or die(print_r($query->errorInfo()) . ' <a href="?id=reports">НАЗАД</a>');
     }
 }
 ?>

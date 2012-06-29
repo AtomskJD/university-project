@@ -86,7 +86,7 @@ class Items extends TableAccess {
             $query->bindParam(':storage_id', $prop['storage_id']);
             $query->bindParam(':unit_id', $prop['unit_id']);
             
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query->execute() or die ($this->showError($query->errorInfo())  . ' <a href="?id=items">НАЗАД</a>');
         }
         catch (PDOException $e){
             echo $e->getMessage();
@@ -98,7 +98,7 @@ class Items extends TableAccess {
         $query = $this->_db->prepare("DELETE FROM items WHERE item_id = :item_id");
         $query->bindParam(':item_id', $param[0]);
         
-        $query->execute() or die(print_r($query->errorInfo()));
+        $query->execute() or die($this->showError($query->errorInfo()) . ' <a href="?id=items">НАЗАД</a>');
     }
 }
 ?>

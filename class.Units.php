@@ -60,7 +60,7 @@ class Units extends TableAccess {
             $query->bindParam(':unit_id', $prop['unit_id']);
             $query->bindParam(':unit_name', $prop['unit_name']);
             
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query->execute() or die (print_r($query->errorInfo()) . ' <a href="?id=units">НАЗАД</a>');
         }
         catch (PDOException $e){
             echo $e->getMessage();
@@ -72,7 +72,7 @@ class Units extends TableAccess {
         $query = $this->_db->prepare("DELETE FROM units WHERE unit_id = :unit_id");
         $query->bindParam(':unit_id', $param[0]);
         
-        $query->execute() or die(print_r($query->errorInfo()));
+        $query->execute() or die(print_r($query->errorInfo()) . ' <a href="?id=units">НАЗАД</a>');
     }
 }
 ?>

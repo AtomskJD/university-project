@@ -73,11 +73,11 @@ class View {
         printf("<p>Таблица модержит %d записей</p>", $this->table_class->getCount());
     }
     
-    protected function viewHeaders()   // Интерфейс к getTableProp выводим заголовги полей
+    protected function viewHeaders()   // Интерфейс к getTableProp выводим заголовги полей (depricated)
     {   
         $out = "\r\n<tr>";
         foreach ($this->table_class->getHeaders() as $prop) {
-            $out .= '<td>'. $prop .'</td>';
+            $out .= '<th>'. $prop .'</th>';
         }
         $out .= "</tr>";
         return $out;
@@ -93,16 +93,16 @@ class View {
     {
         if (($_SERVER['REQUEST_METHOD'] != 'POST') and (!isset($_GET['delete']))){
         
-        $table  = $this->table_class->getHeaders();
+        $table  = $this->table_class->getHeaders(get_class($this->table_class));
         $data   = $this->table_class->getData();
         $prop   = $this->table_class->getTableProp();
         $i      = 0;
         
         //var_dump($data);
-        foreach($data as $data_arr){
+        foreach($data as $data_arr){            // Разбираем массив данных
             //var_dump($data_arr);
             $i++;
-            foreach($prop as $prop_arr){
+            foreach($prop as $prop_arr){        // Разбираем массив параметров таблицы-класса
                 //var_dump($prop_arr);
                 if ($prop_arr['show']){         //TODO: возможно проверка на принадлежность списку свойств заменит проверку SHOW(ненужные поля) 
                     $name = $prop_arr['name'];
@@ -111,9 +111,9 @@ class View {
                         
                         if (!isset($data_arr[$name]))
                             $data_arr[$name] = '---';
-                    $table[$i+1][] = $data_arr[$name]; // видимая часть таблицы + заголовки
+                    $table[$i+1][] = $data_arr[$name];  // видимая часть таблицы + заголовки
                 }
-                if (isset($prop_arr['pkey'])){ // Примари ключи для удаления
+                if (isset($prop_arr['pkey'])){          // Примари ключи для удаления
                     $name = $prop_arr['name'];
                     try{
                         if (!array_key_exists($name, $data_arr))
@@ -127,14 +127,29 @@ class View {
                     
                 }
             }
-            // тут ссылка на удаление
-            $table[$i+1][] = "<a href=$this->selfpath&delete=". implode('|',$pkeys[$i]) .">удалить</a>";   
+            // тут ссылка на удаление в сводной таблице она ненужна
+            if (get_class($this->table_class) != 'Audit')   
+                $table[$i+1][] = "<a href=$this->selfpath&delete=". implode('|',$pkeys[$i]) .">удалить</a>";   
         }
         //echo $this->viewHeaders();
+        $is_headers=0;                                  // Собираем таблицу
         foreach ($table as $tr){
+            $is_headers++;
             echo '<tr>';
+            $count = 0;
                 foreach ($tr as $td){
-                    echo "<td>$td</td>";
+                    $count++;
+                    if ($is_headers == 1)
+                        echo "<th>$td</th>"; 
+                    else {
+                        $class ='';
+                        if ($td < 0){
+                            $class = "class='minus'";
+                        }elseif((get_class($this->table_class) == 'Audit') and ($count == 7) and ($td == 0))
+                            $class = "class='itsok'";
+                         elseif((get_class($this->table_class) == 'Audit') and ($count == 7)) $class = "class='plus'";
+                        echo "<td $class>$td</td>";
+                    }
                 }
             echo '</tr>';
         }
@@ -171,17 +186,20 @@ class View {
             for ($i=0; $i<$prop_num; $i++){
                 if (isset($prop[$i]['hide']) or !$prop[$i]['show'] ) continue;
                 if (!$prop[$i]['fkey']){
-                    $out .= "<p>"
+                    $out .= "<p><div class='field_name'>"
                     . $prop[$i]['t_name']
-                    .": <input type='text' name='". $prop[$i]['name'] ."'></p>\n";
+                    .": </div><input type='text' name='". $prop[$i]['name'] ."'></p>\n";
                 }
                 else {
-                    $out .= "<p>". $prop[$i]['t_name'] ." : ". $this->viewList($prop[$i])
+                    $out .= "<p><div class='field_name'>". $prop[$i]['t_name'] ." : </div>". $this->viewList($prop[$i])
                         . "</p>\n";
                         
                 }
         }
-        $out .= "<input type='submit'>";
+        if (get_class($this->table_class) == 'Audit')  
+            $out .= "<input type='hidden' value='Добавить запись'>";
+        else
+            $out .= "<input type='submit' value='Добавить запись'>";
         $out .= "</form>";
         echo $out;
         } 
@@ -189,7 +207,7 @@ class View {
             for ($i=0; $i < $prop_num; $i++) {
                 $name = $prop[$i]['name'];
                 if(array_key_exists('hide', $prop[$i])) continue;
-                $arr[$name] = $_POST[$name];
+                $arr[$name] = trim(htmlspecialchars(strip_tags($_POST[$name])));
             }
             //var_dump($arr);
             $this->table_class->setData($arr);

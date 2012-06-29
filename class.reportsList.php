@@ -1,8 +1,8 @@
 <?php
 class reportsList extends TableAccess {
     protected $table_name   = "items_has_workshops";
-    protected $table_title  = "Список отчетов";
-    protected $table_info   = "Отчет создается в этой таблице";
+    protected $table_title  = "Список цеховых накладных";
+    protected $table_info   = "Накладная создается в этой таблице";
     protected $table_count  = "none";
     protected $table_prop   = array(
                                         array(
@@ -90,7 +90,7 @@ class reportsList extends TableAccess {
             $query->bindParam(':report_id', $prop['report_id']);
             $query->bindParam(':report_date', $prop['report_date']);
             
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query->execute() or die (print_r($query->errorInfo()) . ' <a href="?id=reportslist">НАЗАД</a>');
         }
         catch (PDOException $e){
             echo $e->getMessage();
@@ -102,7 +102,7 @@ class reportsList extends TableAccess {
         $query->bindParam(':workshop_id', $param[0]);
         $query->bindParam(':report_id', $param[1]);
         
-        $query->execute() or die(print_r($query->errorInfo()));
+        $query->execute() or die(print_r($query->errorInfo()) . ' <a href="?id=reportslist">НАЗАД</a>');
     }
 }
 ?>

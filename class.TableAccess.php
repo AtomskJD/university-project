@@ -21,6 +21,10 @@ abstract class TableAccess {
     abstract public function setData($prop);    // Вставка данных
     abstract public function deleteRow($param); // Удаление строки из представления
     
+    public function showError($err){
+        return "<span id='ERR'>".$err[2]."</span>";
+    }
+    
     public function getTableName()
     {
         return $this->table_name;
@@ -41,13 +45,14 @@ abstract class TableAccess {
         return $this->table_prop;    
     }
     
-    function getHeaders()                       // Возвращает переведенные заголовки таблицы из свойств таблицы 
+    function getHeaders($table)                       // Возвращает переведенные заголовки таблицы из свойств таблицы 
     {
         foreach ($this->table_prop as $headers){
             if ($headers['show'])
             $out[0][] = $headers['t_name'];
         }
-        $out[0][] = 'удалить';
+        if ($table != 'Audit')
+            $out[0][] = 'удалить';
         return $out;
     }
     

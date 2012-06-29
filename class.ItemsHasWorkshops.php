@@ -56,7 +56,8 @@ class ItemsHasWorkshops extends TableAccess {
             INNER JOIN items
                 ON items_has_workshops.items_item_id = items.item_id
             INNER JOIN workshops
-                ON items_has_workshops.workshops_workshop_id = workshops.workshop_id ORDER BY item_name";
+                ON items_has_workshops.workshops_workshop_id = workshops.workshop_id 
+            ORDER BY workshops_workshop_id, item_name";
         $query = $this->_db->prepare($sql);
         $query->execute();
         $query->setFetchMode(PDO::FETCH_ASSOC);
@@ -73,7 +74,7 @@ class ItemsHasWorkshops extends TableAccess {
             
             $query->bindParam(':item_id', $prop['items_item_id']);
             $query->bindParam(':workshop_id', $prop['workshops_workshop_id']);
-            $query->execute() or die (print_r($query->errorInfo()) );
+            $query->execute() or die (print_r($query->errorInfo()) . ' <a href="?id=itemshasworkshops">НАЗАД</a>');
         }
         catch (PDOException $e){
             echo $e->getMessage();
@@ -87,7 +88,7 @@ class ItemsHasWorkshops extends TableAccess {
         $query->bindParam(':items_item_id', $param[0]);
         $query->bindParam(':workshops_workshop_id', $param[1]);
         
-        $query->execute() or die(print_r($query->errorInfo()) );
+        $query->execute() or die(print_r($query->errorInfo()) . ' <a href="?id=itemshasworkshops">НАЗАД</a>');
     }
 }
 ?>

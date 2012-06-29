@@ -1,0 +1,81 @@
+#nav a:link{
+    color:  #eeFFbb;
+}
+#nav a:visited {
+    color:  #eeFFbb;
+    
+}
+#nav a:hover {
+    color:  #FFF;
+}
+#nav a {
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: small;
+}
+
+#nav {
+    margin: 0 auto;
+    padding: 10px;
+    width: 855px;
+    background-color: #aaa;
+}
+#header {
+    width: 100%;
+}
+#main {
+    width: 870px;
+    margin: 0px auto;
+}
+#main p {
+    margin: 5px 20px;
+}
+table {
+    margin: 20px auto;
+    text-align: center;
+	border-width: 2px;
+	border-spacing: 0px;
+	border-style: solid;
+	border-color: black;
+	border-collapse: separate;
+	background-color: white;
+}
+table th {
+	border-width: 1px;
+	padding: 2px;
+	border-style: inset;
+	border-color: gray;
+	background-color: white;
+	-moz-border-radius: ;
+}
+table td {
+	border-width: 1px;
+	padding: 2px;
+	border-style: inset;
+	border-color: gray;
+	background-color: white;
+	-moz-border-radius: ;
+}
+.field_name {
+    width: 200px;
+    position: relative;
+    float: left;
+}
+#ERR {
+    color: #CC0000;
+    font-size: large;
+    border:dashed medium;
+    background: orange;
+    padding: 30px;
+}
+td.minus {
+    color: red;
+    font-weight: bold;
+}
+td.plus {
+    color: green;
+    font-weight: bold;
+}
+td.itsok {
+    font-weight: bold;
+}

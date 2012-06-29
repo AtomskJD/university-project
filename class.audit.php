@@ -112,7 +112,7 @@ class Audit extends TableAccess {
     {
         //Получаем данные из таблицы
         $sql = "-- BEGIN MAIN PART
-                SELECT MONTHNAME(output_date) AS output_month, MONTHNAME(report_date) AS report_month, item_name, unit_name, order_quantity, summ, summ-order_quantity AS excess FROM (
+                SELECT workshops.workshop_id, items.item_id, MONTHNAME(output_date) AS output_month, MONTHNAME(report_date) AS report_month, item_name, unit_name, order_quantity, summ, summ-order_quantity AS excess FROM (
                     SELECT * FROM orders
                         
                         LEFT OUTER JOIN (SELECT * FROM order_join) j1 -- use select from view
@@ -141,7 +141,7 @@ class Audit extends TableAccess {
                 LEFT JOIN workshops
                             ON workshops.workshop_id = main1.workshop_id OR workshops.workshop_id = main1.workshop_id_rep
                             
-    ORDER BY output_date, report_date
+    ORDER BY output_date, report_date, workshops.workshop_id, items.item_id
 ";
         $query = $this->_db->prepare($sql);
         $query->execute();
